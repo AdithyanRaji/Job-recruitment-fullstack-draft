@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User registeration page</title>
+</head>
+<body>
+
+<div>
+    <h2>USER REGISTRATION</h2>
+    <form action="{{url_for('app.register')}}" method="POST">
+        <label>USERNAME: </label>
+        <input type="text" name="username">
+        <br><br>
+        <label>PASSWORD:</label>
+        <input type="password" name="password">
+        <br><br>
+        <button type = "submit "> SUBMIT HERE</button>
+    </form>
+</div>
+</body>
+</html>

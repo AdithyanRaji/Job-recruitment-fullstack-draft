@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>
+    A-JYNT JOB RECRUITERS
+  </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-        LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+</head>
+
+<body>
+  {% include 'nav.html' %}
+  <div class="container" id="container">
+    <h1 class="text-center mt-4 mb-4 shadow-sm p-3 mb-5 bg-body-tertiary rounded">A-JYNT RECRUITERS</h1>
+    <img class="img-fluid shadow p-3 mb-5 bg-body-tertiary rounded" id="banner"
+      src="{{ url_for('static', filename='banner.jpg') }}" alt="Partha Recruiters Logo" height="800" width="1500">
+    <h2 class="text-center mt-4 mb-4 shadow-sm p-3 mb-5 bg-body-tertiary rounded"><b>About AJY Recruiters</b></h2>
+    <div class="row" style="margin-bottom:16px">
+      <div class="col-md-8">
+        <p class="lead">A-JYNT Recruiters is a trusted recruitment and talent acquisition firm dedicated to connecting
+          skilled professionals with top- tier companies across diverse industries. With a strong focus on quality,
+          integrity, and results, we specialize in identifying and placing the right talent in the right roles — from
+          entry-level to executive positions.</p>
+
+        <p class="lead">
+          Our team of experienced recruiters combines industry insight with a personalized approach to meet the unique
+          hiring needs of our clients
+          while supporting candidates throughout their career journey. At A-JYNT Recruiters, we’re committed to building
+          lasting partnerships that
+          drive growth and success for both employers and job seekers.
+        </p>
+      </div>
+      <div class="d-none d-md-block col-md-4">
+        <img class="img-fluid shadow p-3 mb-5 bg-body-tertiary rounded"
+          src="{{ url_for('static', filename='AJLOGO.png') }}" alt="About Partha Recruiters" height="200" width="400">
+      </div>
+    </div>
+    <h2 class="text-center mt-4 mb-4 shadow-sm p-3 mb-5 bg-body-tertiary rounded">Carreer Options</h2>
+    <p class="lead"> <b>These are the career options, currently...</b></p>
+    <div class="mt-4" id="jobs">
+      {% for job in jobs %}
+      {% include 'jobs.html' %}
+      {% endfor %}
+    </div>
+    <div style="text-align:center">
+      <a href="mailto:partharecruiters12@gmail.com?subject=Questions%20about%20Job%20Openings&body=MY%20NAME%3A%20%3Center%20your%20name%3E%0D%0A%0D%0AQUESTIONS%3A%20%3Center%20your%20question%20here%3E"
+        class="btn btn-outline-secondary mt-4"> Contact Us</a>
+    </div>
+  </div>
+  {% include 'footer.html' %}
+</body>
+
+</html>
