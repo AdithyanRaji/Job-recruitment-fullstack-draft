@@ -45,6 +45,22 @@ def home():
     return render_template('home.html')
 
 #----------------------------------------REGISTRATION-------------------------------
+@app.route('/user/login', methods=['GET', 'POST'])
+def user_register():
+    return render_template('register.html', role='user')
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_register():
+    return render_template('register.html', role='admin')
+
+@app.route('/user/login', methods=['GET', 'POST'])
+def user_login():
+    return render_template('login.html', role='user')
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    return render_template('login.html', role='admin')
+
 @app.route('/register',methods=['GET','POST'])
 def register():
     if request.methods == 'POST':

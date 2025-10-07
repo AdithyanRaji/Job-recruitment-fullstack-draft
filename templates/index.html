@@ -2,14 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>INTRO PAGE</title>
+    <title>Access | Type</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <div>
+    <div style="text-align: center; display: block; margin: 100px auto 0 auto; background: red;border-radius: 3px;padding: 30px;">
         <form action="{{ url_for('app.home') }}" method="GET">
-            <lablel for="admin">ADMIN</lablel>
-            <button name="admin" type="SUBMIT">
+            <button name="admin" type="SUBMIT">ADMIN</button
+        </form>
+        <br><br>
+        <form action="{{ url_for('app.user') }}" method="GET">
+            <button name="user" type="SUBMIT">USER</button>
+        </form>
     </div>
+
 </body>
 </html>
