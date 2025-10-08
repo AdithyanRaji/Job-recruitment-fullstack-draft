@@ -39,17 +39,21 @@ class AppliedJob(db.Model):
 
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
-
+#----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/home')
 def home():
     return render_template('home.html')
 
 #----------------------------------------REGISTRATION-------------------------------
-@app.route('/user/login', methods=['GET', 'POST'])
+@app.route('/user/register', methods=['GET', 'POST'])
 def user_register():
     return render_template('register.html', role='user')
 
-@app.route('/admin/login', methods=['GET', 'POST'])
+@app.route('/admin/register', methods=['GET', 'POST'])
 def admin_register():
     return render_template('register.html', role='admin')
 
@@ -77,7 +81,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             flash('Registration successful! You can now log in.', 'success')
-            return redirect(url_for('auth.login'))
+            return redirect('/login')
         else:
             flash('Please fill in all fields.', 'danger')
 
@@ -97,7 +101,7 @@ def login():
         if user and user.check_password(password):  
             session['username'] = username
             flash('Login successful!', 'success')
-            return redirect(url_for('tasks.view_tasks'))
+            return redirect(url_for('app.home'))
         else:
             flash('Invalid credentials, please try again.', 'danger')
     

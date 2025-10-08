@@ -22,7 +22,7 @@
     {% endif %}
     {% if role.upper() == "ADMIN" %}
         <h2>ADMIN REGISTRATION</h2>
-        <form action="{{url_for('app.register')}}" method="POST">
+        <form action="{{url_for('register')}}" method="POST">
             <input type="hidden" name="role" value="admin">
             <label>ADMINNAME: </label>
             <input type="text" name="adminname">
@@ -32,10 +32,10 @@
             <br><br>
             <button type = "submit "> SUBMIT HERE</button>
         </form>
-        <form action="{{url_for('app.admin_login')}}" method="GET">
-            <button type = "submit "> ALREADY REGISTERED? LOGIN HERE</button>
-        </form>
     {% endif %}
+    <form action="{{url_for('admin_login')}}" method="GET">
+        <button type = "submit "> ALREADY REGISTERED? LOGIN HERE</button>
+    </form>
 </div>
 </body>
 </html>
