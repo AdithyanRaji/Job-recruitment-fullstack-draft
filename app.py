@@ -21,7 +21,7 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    applied_jobs = db.relationship('AppliedJob', back_populates='User')
+    applied_jobs = db.relationship('AppliedJob', back_populates='user')
 
 class Job(db.Model):
 
@@ -30,12 +30,12 @@ class Job(db.Model):
     job_location = db.Column(db.String(20),nullable = False)
     job_salary = db.Column(db.Float,nullable = False)
 
-    applicants = db.relationship('AppliedJob', back_populates='Job')
+    applicants = db.relationship('AppliedJob', back_populates='job')
 
 class AppliedJob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
-    job_id = db.Column(db.Integer, db.ForeignKey('Job.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    job_id = db.Column(db.Integer, db.ForeignKey('job.job_id'), nullable=False)
 
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
@@ -67,9 +67,9 @@ def admin_login():
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-    if request.methods == 'POST':
-        user_n = request.form('username')
-        user_p = request.form('password')
+    if request.method == 'POST':
+        user_n = request.form['username']
+        user_p = request.form['password']
         existing_user = User.query.filter_by(username=user_n).first()
 
         if existing_user:
