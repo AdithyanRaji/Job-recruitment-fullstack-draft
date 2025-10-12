@@ -40,8 +40,9 @@ class AppliedJob(db.Model):
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
-    
-db.create_all()    
+# add the with optiuon to create_all
+with app.app_context(): 
+    db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
 def index():
