@@ -39,6 +39,9 @@ class AppliedJob(db.Model):
 
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
+    
+    
+db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
 def index():
@@ -92,8 +95,8 @@ def register():
 @app.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.form.get['username']
+        password = request.form.get['password']
 
 
         user = User.query.filter_by(username=username).first()
