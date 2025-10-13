@@ -13,6 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String(10), nullable=False)  # 'user' or 'admin'
     username = db.Column(db.String(20), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     
@@ -41,7 +42,7 @@ class AppliedJob(db.Model):
     job = db.relationship('Job', back_populates='applicants')
     
 # add the with optiuon to create_all
-with app.app_context(): 
+with app.app_context():
     db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
@@ -61,6 +62,33 @@ def user_register():
 def admin_register():
     return render_template('register.html', role='admin')
 
+
+@app.route('/<role>/check_register', methods=['GET', 'POST'])
+def check_register(role):
+    if request.method == 'POST':
+        user_n = request.form['username']
+        user_p = request.form['password']
+
+        existing_user = User.query.filter_by(username=user_n).first()
+
+        if existing_user:
+            flash('Username already exists.', 'warning')
+            return render_template('register.html', role=role)
+
+        elif user_n and user_p:
+            new_user = User(username=user_n, role=role)
+            new_user.set_password(user_p)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful! You can now log in.', 'success')
+            return redirect(f'/{role}/login')
+
+        else:
+            flash('Please fill in all fields.', 'danger')
+
+    return render_template('register.html', role=role)
+
+#---------------------------------------------LOGIN---------------------------------------
 @app.route('/user/login', methods=['GET', 'POST'])
 def user_login():
     return render_template('login.html', role='user')
@@ -69,30 +97,6 @@ def user_login():
 def admin_login():
     return render_template('login.html', role='admin')
 
-@app.route('/register',methods=['GET','POST'])
-def register():
-    if request.method == 'POST':
-        user_n = request.form['username']
-        user_p = request.form['password']
-        existing_user = User.query.filter_by(username=user_n).first()
-
-        if existing_user:
-            flash('Username already exists.', 'warning')
-        
-        elif user_n and user_p:
-            new_user = User(username=user_n)
-            new_user.set_password(user_p)  
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Registration successful! You can now log in.', 'success')
-            return redirect('/login')
-        else:
-            flash('Please fill in all fields.', 'danger')
-
-
-    return render_template('register.html')
-
-#---------------------------------------------LOGIN---------------------------------------
 @app.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
