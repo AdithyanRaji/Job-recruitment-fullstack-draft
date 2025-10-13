@@ -37,12 +37,13 @@ class AppliedJob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     job_id = db.Column(db.Integer, db.ForeignKey('job.job_id'), nullable=False)
-
+    
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
 # add the with optiuon to create_all
 with app.app_context():
+    db.drop_all()
     db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
@@ -97,11 +98,11 @@ def user_login():
 def admin_login():
     return render_template('login.html', role='admin')
 
-@app.route('/login',methods=['GET','POST'])
-def login():
+@app.route('/<role>/check_login',methods=['GET','POST'])
+def check_login(role):
     if request.method == 'POST':
-        username = request.form.get['username']
-        password = request.form.get['password']
+        username = request.form['username']
+        password = request.form['password']
 
 
         user = User.query.filter_by(username=username).first()
@@ -113,7 +114,7 @@ def login():
         else:
             flash('Invalid credentials, please try again.', 'danger')
     
-    return render_template('login.html')
+    return render_template('login.html',role=role)
 
 
 
