@@ -15,7 +15,11 @@
         <p>This is the admin dashboard where you can manage the platform.</p>
         <!-- Add more admin functionalities here -->
         <ul>
-            <li>User Info</li>
+            <li>
+                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                    <button type="submit">USER INFORMATION</button>
+                </form>
+            </li>  
             <li>User Selection</li>
             <li>Job applications</li>
             <li>Update Jobs</li>

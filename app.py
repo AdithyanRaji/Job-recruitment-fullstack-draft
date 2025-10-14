@@ -54,13 +54,6 @@ def index():
 def home(uname):
     return render_template('home.html', uname=uname)
 
-@app.route('/admin/dashboard')
-def admin_dashboard():
-    if 'role' in session and session['role'] == 'admin':
-        return render_template('admin_dashboard.html', uname=session['username'])
-    else:
-        flash('Access denied. Admins only.', 'danger')
-        return redirect(url_for('index'))
 #----------------------------------------REGISTRATION-------------------------------
 @app.route('/user/register', methods=['GET', 'POST'])
 def user_register():
@@ -132,6 +125,14 @@ def check_login(role):
 
 
 #-------------------------------------------Job apply--------------------------------
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if 'role' in session and session['role'] == 'admin':
+        return render_template('admin_dashboard.html', uname=session['username'])
+    else:
+        flash('Access denied. Admins only.', 'danger')
+        return redirect(url_for('index'))
+    
 @app.route('/job_reg',methods=['GET','POST'])
 def job_reg():
     title = request.form('title')
