@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ role.upper() }} login page</title>
+    <title>{{ role.upper() }} Login Page</title>
 </head>
 <body>
     <div>
         <h2>{{ role.upper() }} LOGIN</h2>
-    <form action="{{url_for('login')}}" method="POST">
-        <label> NAME: </label>
-        <input type="text" name="username">
-        <br><br>
-        <label>PASSWORD:</label>
-        <input type="password" name="password">
-        <br><br>
-        <button type = "submit "> SUBMIT HERE</button>
-    </form>
-</div>
+
+        <form action="{{ url_for('check_login', role=role) }}" method="POST">
+            <label>NAME:</label>
+            <input type="text" name="username" required>
+            <br><br>
+
+            <label>PASSWORD:</label>
+            <input type="password" name="password" required>
+            <br><br>
+
+            <button type="submit">SUBMIT HERE</button>
+        </form>
+    </div>
 </body>
 </html>

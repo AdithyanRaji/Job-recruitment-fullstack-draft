@@ -37,23 +37,30 @@ class AppliedJob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     job_id = db.Column(db.Integer, db.ForeignKey('job.job_id'), nullable=False)
+    job_title = db.Column(db.String(20), nullable=False)
     
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
 # add the with optiuon to create_all
 with app.app_context():
-    db.drop_all()
     db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
+@app.route('/<uname>/home')
+def home(uname):
+    return render_template('home.html', uname=uname)
 
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    if 'role' in session and session['role'] == 'admin':
+        return render_template('admin_dashboard.html', uname=session['username'])
+    else:
+        flash('Access denied. Admins only.', 'danger')
+        return redirect(url_for('index'))
 #----------------------------------------REGISTRATION-------------------------------
 @app.route('/user/register', methods=['GET', 'POST'])
 def user_register():
@@ -98,23 +105,29 @@ def user_login():
 def admin_login():
     return render_template('login.html', role='admin')
 
-@app.route('/<role>/check_login',methods=['GET','POST'])
+@app.route('/<role>/check_login', methods=['GET', 'POST'])
 def check_login(role):
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-
         user = User.query.filter_by(username=username).first()
 
-        if user and user.check_password(password):  
+        if user and user.check_password(password):
             session['username'] = username
+            session['role'] = user.role  
             flash('Login successful!', 'success')
-            return redirect(url_for('app.home'))
+
+            # redirect based on role
+            if user.role == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('home',uname=username))
         else:
             flash('Invalid credentials, please try again.', 'danger')
-    
-    return render_template('login.html',role=role)
+
+    return render_template('login.html', role=role)
+
 
 
 
