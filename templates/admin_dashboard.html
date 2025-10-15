@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Add your CSS links here -->
 </head>
+
 <body>
     <header>
         <h1>Admin Dashboard</h1>
@@ -15,18 +17,36 @@
         <p>This is the admin dashboard where you can manage the platform.</p>
         <!-- Add more admin functionalities here -->
         <ul>
+            <br><br>
             <li>
                 <form action="{{ url_for('home',uname=uname) }}" method="GET">
-                    <button type="submit">USER INFORMATION</button>
+                    <button type="submit">User Information</button>
                 </form>
-            </li>  
-            <li>User Selection</li>
-            <li>Job applications</li>
-            <li>Update Jobs</li>
+            </li>
+            <br><br>
+            <li>
+                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                    <button type="submit">Applicant Selection</button>
+                </form>
+            </li>
+            <br><br>
+            <li>
+                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                    <button type="submit">Job Listings</button>
+                </form>
+            </li>
+            <br><br>
+            <li>
+                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                    <button type="submit">Update Jobs</button>
+                </form>
+            </li>
+            <br><br>
         </ul>
     </main>
     <footer>
-        <p>&copy; 2024 Job Recruitment Platform</p>
+        <p>&copy; 2025 AJYNT JOB RECRUITERS</p>
     </footer>
 </body>
+
 </html>

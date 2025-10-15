@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USER INFORMATIONS</title>
+</head>
+<body>
+    {% for user in users %}
+        <h2>User: {{ user.username }}</h2>
+        <p>Email: {{ user.email }}</p>
+        <p>Full Name: {{ user.full_name }}</p>
+        <hr>
+    {% endfor %}
+    <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+        <button type="submit">Back to Admin Dashboard</button>
+    </form>
+    
+</body>
+</html>    

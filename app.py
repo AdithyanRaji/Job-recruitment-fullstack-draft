@@ -15,6 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role = db.Column(db.String(10), nullable=False)  # 'user' or 'admin'
     username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=True)
+    full_name = db.Column(db.String(100), nullable=True)
     password_hash = db.Column(db.String(128), nullable=False)
     
     def set_password(self, password):
@@ -36,6 +38,7 @@ class Job(db.Model):
 class AppliedJob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(20), nullable=False)
     job_id = db.Column(db.Integer, db.ForeignKey('job.job_id'), nullable=False)
     job_title = db.Column(db.String(20), nullable=False)
     
@@ -44,6 +47,7 @@ class AppliedJob(db.Model):
     
 # add the with optiuon to create_all
 with app.app_context():
+    db.drop_all()
     db.create_all()    
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
