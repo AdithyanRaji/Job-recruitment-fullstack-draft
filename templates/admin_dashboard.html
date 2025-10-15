@@ -19,25 +19,25 @@
         <ul>
             <br><br>
             <li>
-                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                <form action="{{ url_for('applicant_info',uname=uname) }}" method="GET">
                     <button type="submit">User Information</button>
                 </form>
             </li>
             <br><br>
             <li>
-                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                <form action="{{ url_for('selected_applicants',uname=uname) }}" method="GET">
                     <button type="submit">Applicant Selection</button>
                 </form>
             </li>
             <br><br>
             <li>
-                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                <form action="{{ url_for('joblistings',uname=uname) }}" method="GET">
                     <button type="submit">Job Listings</button>
                 </form>
             </li>
             <br><br>
             <li>
-                <form action="{{ url_for('home',uname=uname) }}" method="GET">
+                <form action="{{ url_for('update_jobs',uname=uname) }}" method="GET">
                     <button type="submit">Update Jobs</button>
                 </form>
             </li>

@@ -125,10 +125,8 @@ def check_login(role):
 
     return render_template('login.html', role=role)
 
+#------------------------------------------ADMIN DASHBOARD-------------------------------
 
-
-
-#-------------------------------------------Job apply--------------------------------
 @app.route('/admin/dashboard')
 def admin_dashboard():
     if 'role' in session and session['role'] == 'admin':
@@ -136,6 +134,25 @@ def admin_dashboard():
     else:
         flash('Access denied. Admins only.', 'danger')
         return redirect(url_for('index'))
+@app.route('/update_jobs')
+def update_jobs():
+    return render_template('addjobs.html')
+
+@app.route('/joblistings')
+def joblistings():
+    jobs = Job.query.all()
+    return render_template('joblistings.html', jobs=jobs)
+
+@app.route('/selected_applicants')
+def selected_applicants():
+    applicants = AppliedJob.query.all()
+    return render_template('selected_applicants.html', applicants=applicants)
+
+@app.rout('apploicant_info')
+def applicant_info():
+    return render_template('applicant_info.html')
+
+#-------------------------------------------Job apply--------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])
 def job_reg():
