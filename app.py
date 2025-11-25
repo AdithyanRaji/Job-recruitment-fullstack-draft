@@ -29,6 +29,8 @@ class User(db.Model):
 class Job(db.Model):
 
     job_id = db.Column(db.Integer, primary_key=True)
+    job_company = db.Column(db.String(20),nullable = False)
+    job_description = db.Column(db.String(100),nullable = True)
     job_title = db.Column(db.String(20),nullable = False)
     job_location = db.Column(db.String(20),nullable = False)
     job_salary = db.Column(db.Float,nullable = False)
@@ -45,10 +47,10 @@ class AppliedJob(db.Model):
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
-# add the with optiuon to create_all
+'''# add the with optiuon to create_all
 with app.app_context():
     db.drop_all()
-    db.create_all()    
+    db.create_all()  '''  
 #----------------------------------------------ROUTES----------------------------------------
 @app.route('/')
 def index():
@@ -134,24 +136,36 @@ def admin_dashboard():
     else:
         flash('Access denied. Admins only.', 'danger')
         return redirect(url_for('index'))
-@app.route('/update_jobs')
-def update_jobs():
-    return render_template('addjobs.html')
+@app.route('/add_jobs')
+def add_jobs():
+    if request.method == 'POST':
+        
+        j_title = request.form['job_title']
+        j_company = request.form['company']
+        j_description = request.form['description']
+        j_location = request.form['location']
+        j_salary = request.form['salary']
+        new_job = Job(job_title=j_title,job_company=j_company ,job_location=j_location,job_description=j_description , job_salary=j_salary)
+        db.session.add(new_job)
+        db.session.commit()
+        flash('Job added successfully!', 'success')
+        return redirect(url_for('admin_dashboard'))
+    
+    return render_template('admn_func/addjobs.html')
 
 @app.route('/joblistings')
 def joblistings():
     jobs = Job.query.all()
-    return render_template('joblistings.html', jobs=jobs)
+    return render_template('admn_func/joblistings.html', jobs=jobs)
 
 @app.route('/selected_applicants')
 def selected_applicants():
     applicants = AppliedJob.query.all()
-    return render_template('selected_applicants.html', applicants=applicants)
+    return render_template('sel_appcn.html', applicants=applicants)
 
-@app.rout('apploicant_info')
+@app.route('/applicant_info')
 def applicant_info():
-    return render_template('applicant_info.html')
-
+    return render_template('user_info.html')
 #-------------------------------------------Job apply--------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])
