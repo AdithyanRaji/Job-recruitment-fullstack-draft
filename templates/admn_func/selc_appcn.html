@@ -9,14 +9,18 @@
 
 <body>
     <h2>APPLICANT SELECTION</h2>
-    {% for applicant in applicants %}
-    <h3>Applicant: {{ AppliedJob.username }}</h3>
-    <p>Position Applied: {{ AppliedJob.job_title }}</p>
-    <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
-        <button type="submit">SELECT USER</button>
-    </form>
-    <hr>
-    {% endfor %}
+    {% if applicants %}
+        {% for applicant in applicants %}
+        <h3>Applicant: {{ AppliedJob.username }}</h3>
+        <p>Position Applied: {{ AppliedJob.job_title }}</p>
+        <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+            <button type="submit">SELECT USER</button>
+        </form>
+        <hr>
+        {% endfor %}
+    {% else %}
+        <p>No applicants available.</p>
+    {% endif %}    
     <br><br>
     <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
         <button type="submit">Back to Admin Dashboard</button>

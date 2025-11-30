@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>ADD JOBS</h2>
-    <form action="{{ url_for('add_jobs', uname=uname) }}" method=["GET","POST"]>
+    <form action="{{ url_for('add_jobs', uname=uname) }}" method="POST">
         <label for="job_title">Job Title:</label><br>
         <input type="text" id="job_title" name="job_title" required><br><br>
 

@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request,flash,redirect,url_for,session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -9,6 +11,7 @@ db=SQLAlchemy()
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'uploads/resumes'
 
 db.init_app(app)
 class User(db.Model):
@@ -43,15 +46,16 @@ class AppliedJob(db.Model):
     username = db.Column(db.String(20), nullable=False)
     job_id = db.Column(db.Integer, db.ForeignKey('job.job_id'), nullable=False)
     job_title = db.Column(db.String(20), nullable=False)
+    resume_path = db.Column(db.String(200), nullable=False)
     
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
-'''# add the with optiuon to create_all
+# add the with optiuon to create_all
 with app.app_context():
     db.drop_all()
-    db.create_all()  '''  
-#----------------------------------------------ROUTES----------------------------------------
+    db.create_all()  
+#------------------------------------------ROUTES---------------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -60,7 +64,7 @@ def index():
 def home(uname):
     return render_template('home.html', uname=uname)
 
-#----------------------------------------REGISTRATION-------------------------------
+#-------------------------------------------REGISTRATION-------------------------------------
 @app.route('/user/register', methods=['GET', 'POST'])
 def user_register():
     return render_template('register.html', role='user')
@@ -74,6 +78,8 @@ def admin_register():
 def check_register(role):
     if request.method == 'POST':
         user_n = request.form['username']
+        user_em = request.form['email']
+        user_fn = request.form['full_name']
         user_p = request.form['password']
 
         existing_user = User.query.filter_by(username=user_n).first()
@@ -83,7 +89,7 @@ def check_register(role):
             return render_template('register.html', role=role)
 
         elif user_n and user_p:
-            new_user = User(username=user_n, role=role)
+            new_user = User(username=user_n, email=user_em, full_name=user_fn, role=role)
             new_user.set_password(user_p)
             db.session.add(new_user)
             db.session.commit()
@@ -95,7 +101,7 @@ def check_register(role):
 
     return render_template('register.html', role=role)
 
-#---------------------------------------------LOGIN---------------------------------------
+#------------------------------------------------LOGIN---------------------------------------
 @app.route('/user/login', methods=['GET', 'POST'])
 def user_login():
     return render_template('login.html', role='user')
@@ -127,7 +133,7 @@ def check_login(role):
 
     return render_template('login.html', role=role)
 
-#------------------------------------------ADMIN DASHBOARD-------------------------------
+#--------------------------------------------ADMIN DASHBOARD---------------------------------
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
@@ -136,20 +142,21 @@ def admin_dashboard():
     else:
         flash('Access denied. Admins only.', 'danger')
         return redirect(url_for('index'))
-@app.route('/add_jobs')
+
+@app.route('/add_jobs',methods=['GET','POST'])
 def add_jobs():
     if request.method == 'POST':
         
         j_title = request.form['job_title']
-        j_company = request.form['company']
-        j_description = request.form['description']
+        j_company = request.form['company_name']
+        j_description = request.form['job_description']
         j_location = request.form['location']
-        j_salary = request.form['salary']
+        j_salary = float(request.form['salary'])
         new_job = Job(job_title=j_title,job_company=j_company ,job_location=j_location,job_description=j_description , job_salary=j_salary)
         db.session.add(new_job)
         db.session.commit()
         flash('Job added successfully!', 'success')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_dashboard',uname=session['username']))
     
     return render_template('admn_func/addjobs.html')
 
@@ -165,8 +172,10 @@ def selected_applicants():
 
 @app.route('/applicant_info')
 def applicant_info():
-    return render_template('user_info.html')
-#-------------------------------------------Job apply--------------------------------
+    u_info = User.query.all()
+    return render_template('user_info.html', users=u_info)
+
+#---------------------------------------------Job apply--------------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])
 def job_reg():

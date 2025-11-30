@@ -7,14 +7,19 @@
 </head>
 <body>
     <h2>Job Listings currently...</h2><br><br>
-    {% for job in jobs %}
-    <h3>Job Title: {{ job.job_title }}</h3>
-    <p>Company: {{ job.company_name }}</p>
-    <p>Description: {{ job.job_description }}</p>
-    <p>Location: {{ job.location }}</p>
-    <p>Salary: ${{ job.salary }}</p>
-    <hr>
-    {% endfor %}
+
+    {% if jobs %}
+        {% for job in jobs %}
+            <h3>Job Title: {{ job.job_title }}</h3>
+            <p>Company: {{ job.job_company }}</p>
+            <p>Description: {{ job.job_description }}</p>
+            <p>Location: {{ job.job_location }}</p>
+            <p>Salary: ${{ job.job_salary }}</p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No job listings available.</p>
+    {% endif %}
     <br><br>
     <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
         <button type="submit">Back to Admin Dashboard</button>
