@@ -51,18 +51,25 @@ class AppliedJob(db.Model):
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
-# add the with optiuon to create_all
+'''# add the with optiuon to create_all
 with app.app_context():
     db.drop_all()
-    db.create_all()  
+    db.create_all()'''  
 #------------------------------------------ROUTES---------------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 @app.route('/<uname>/home')
 def home(uname):
-    return render_template('home.html', uname=uname)
+    if 'username' not in session or session['role'] != 'user':
+        flash("Please login as a user.", "warning")
+        return redirect(url_for('user_login'))
+        
+    jobs = Job.query.all()
+    user = User.query.all()
+    return render_template('home.html', uname=uname, jobs=jobs, users=user)
 
 #-------------------------------------------REGISTRATION-------------------------------------
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -78,8 +85,9 @@ def admin_register():
 def check_register(role):
     if request.method == 'POST':
         user_n = request.form['username']
-        user_em = request.form['email']
-        user_fn = request.form['full_name']
+        if role != 'admin':
+            user_em = request.form['email']
+            user_fn = request.form['full_name']
         user_p = request.form['password']
 
         existing_user = User.query.filter_by(username=user_n).first()
@@ -89,7 +97,10 @@ def check_register(role):
             return render_template('register.html', role=role)
 
         elif user_n and user_p:
-            new_user = User(username=user_n, email=user_em, full_name=user_fn, role=role)
+            if role != 'admin':
+                new_user = User(username=user_n, email=user_em, full_name=user_fn, role=role)
+            else:
+                new_user = User(username=user_n, role=role)
             new_user.set_password(user_p)
             db.session.add(new_user)
             db.session.commit()
@@ -127,6 +138,7 @@ def check_login(role):
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
+                jobs = Job.query.all()
                 return redirect(url_for('home',uname=username))
         else:
             flash('Invalid credentials, please try again.', 'danger')
@@ -168,14 +180,14 @@ def joblistings():
 @app.route('/selected_applicants')
 def selected_applicants():
     applicants = AppliedJob.query.all()
-    return render_template('sel_appcn.html', applicants=applicants)
+    return render_template('admn_func/sel_appcn.html', applicants=applicants)
 
 @app.route('/applicant_info')
 def applicant_info():
     u_info = User.query.all()
-    return render_template('user_info.html', users=u_info)
+    return render_template('admn_func/userinfo.html', users=u_info)
 
-#---------------------------------------------Job apply--------------------------------------
+#---------------------------------------------User Job apply--------------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])
 def job_reg():
@@ -183,5 +195,38 @@ def job_reg():
     location = request.form('location')
     salary = request.form('salary')
 
+@app.route('/view_jobs', methods=['GET', 'POST'])
+def view_jobs():
+    jobs = Job.query.all()
+    return render_template('jobs.html', jobs=jobs)
+
+@app.route('/apply/<int:job_id>', methods=['GET', 'POST'])
+def apply(job_id):
+    if request.method == 'POST':
+        name = request.form['username']
+        resume = request.files['resume']
+
+        if resume:
+            filename = secure_filename(resume.filename)
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            resume.save(save_path)
+
+            application = AppliedJob(username=name,resume_path=save_path, job_id=job_id)
+            db.session.add(application)
+            db.session.commit()
+
+            flash('Application submitted!', 'success')
+            return redirect(url_for('joblistings'))
+
+    return render_template('apply.html', job_id=job_id)
+#---------------------------------------------LOGOUT-----------------------------------------
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('index'))
+
+#---------------------------------------------RUN APP----------------------------------------
 if __name__=='__main__':
     app.run(debug=True)

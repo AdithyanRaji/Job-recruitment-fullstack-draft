@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> AJYNT-{{ request.args.get('title') }}</title>
+</head>
+<body>
+
+    <h1>Apply For Job - {{ request.args.get('title') }}</h1>
+
+    <h2>Job Description</h2>
+    <p>{{ request.args.get('desc') }}</p>
+    <p><b>Location:</b> {{ request.args.get('location') }}</p>
+    <p><b>Salary:</b> {{ request.args.get('salary') }}</p>
+
+    <p><b>Applicant:</b> {{ session['username'] }}</p>
+
+    <form action="{{ url_for('apply', job_id=job_id) }}"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <!-- Keep job-related values across POST -->
+        <input type="hidden" name="title" value="{{ request.args.get('title') }}">
+        <input type="hidden" name="location" value="{{ request.args.get('location') }}">
+        <input type="hidden" name="salary" value="{{ request.args.get('salary') }}">
+        <input type="hidden" name="desc" value="{{ request.args.get('desc') }}">
+        <input type="hidden" name="username" value="{{ session['username'] }}">
+
+        <!-- Resume upload -->
+        <label>Upload Resume (PDF/DOC):</label><br>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required><br><br>
+
+        <button type="submit">Submit Application</button>
+    </form>
+
+</body>
+</html>

@@ -7,13 +7,12 @@
 </head>
 <body>
     {% for user in users %}
-        {% if user.username == 'admin' %}
-            {% continue %}
-        {% endif %}
+        {% if user.username != 'admin' %}
         <h2>User: {{ user.username }}</h2>
         <p>Email: {{ user.email }}</p>
         <p>Full Name: {{ user.full_name }}</p>
         <hr>
+        {% endif %}
     {% endfor %}
     <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
         <button type="submit">Back to Admin Dashboard</button>
