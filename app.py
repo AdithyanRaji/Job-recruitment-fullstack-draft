@@ -68,7 +68,7 @@ def home(uname):
         return redirect(url_for('user_login'))
         
     jobs = Job.query.all()
-    user = User.query.all()
+    user = User.query.filter_by(username=session['username']).first()
     return render_template('home.html', uname=uname, jobs=jobs, users=user)
 
 #-------------------------------------------REGISTRATION-------------------------------------
