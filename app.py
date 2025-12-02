@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from werkzeug.utils import secure_filename
+from flask import send_file
 
 app = Flask(__name__)
 
@@ -68,8 +69,7 @@ def home(uname):
         return redirect(url_for('user_login'))
         
     jobs = Job.query.all()
-    user = User.query.filter_by(username=session['username']).first()
-    return render_template('home.html', uname=uname, jobs=jobs, users=user)
+    return render_template('home.html', uname=uname, jobs=jobs)
 
 #-------------------------------------------REGISTRATION-------------------------------------
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -180,7 +180,7 @@ def joblistings():
 @app.route('/selected_applicants')
 def selected_applicants():
     applicants = AppliedJob.query.all()
-    return render_template('admn_func/sel_appcn.html', applicants=applicants)
+    return render_template('admn_func/selc_appcn.html', applicants=applicants)
 
 @app.route('/applicant_info')
 def applicant_info():
@@ -203,7 +203,7 @@ def view_jobs():
 @app.route('/apply/<int:job_id>', methods=['GET', 'POST'])
 def apply(job_id):
     if request.method == 'POST':
-        name = request.form['username']
+        name = session['username']
         resume = request.files['resume']
 
         if resume:
@@ -212,7 +212,8 @@ def apply(job_id):
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             resume.save(save_path)
 
-            application = AppliedJob(username=name,resume_path=save_path, job_id=job_id)
+            user_id = User.query.filter_by(username=name).first().id
+            application = AppliedJob(username=name,resume_path=save_path, job_id=job_id,user_id=user_id, job_title=request.form['title'])
             db.session.add(application)
             db.session.commit()
 
@@ -220,6 +221,15 @@ def apply(job_id):
             return redirect(url_for('joblistings'))
 
     return render_template('apply.html', job_id=job_id)
+
+
+@app.route('/view_resume/<int:applicant_id>', methods=['GET'])
+def view_resume(applicant_id):
+    applicant = AppliedJob.query.get_or_404(applicant_id)
+    resume_path = applicant.resume_path
+
+    return send_file(resume_path, as_attachment=False)
+
 #---------------------------------------------LOGOUT-----------------------------------------
 @app.route('/logout')
 def logout():

@@ -9,21 +9,22 @@
         <div>
             <b>Location: {{ job.job_location }}</b>
         </div>
+        <div>
             <b>Salary: {{ job.job_salary }}</b>
         </div>
     </div>
 
+
     <!-- Apply Button Column -->
     <div class="col-2 text-end">
-    <form action="{{ url_for('apply', job_id = job.job_id, user_id = users.user_id) }}" method="POST">
-        <input type="hidden" name="name" value="{{ uname }}">
-        <input type="hidden" name="title" value="{{ job.job_title }}">
-        <input type="hidden" name="location" value="{{ job.job_location }}">
-        <input type="hidden" name="desc" value="{{ job.job_description }}">
-        <input type="hidden" name="salary" value="{{ job.job_salary }}">
-        <button type="submit" class="btn btn-secondary btn-sm">APPLY</button>
-    </form>
-</div>
+        <form action="{{ url_for('apply', job_id = job.job_id) }}" method="GET">
+            <input type="hidden" name="title" value="{{ job.job_title }}">
+            <input type="hidden" name="location" value="{{ job.job_location }}">
+            <input type="hidden" name="desc" value="{{ job.job_description }}">
+            <input type="hidden" name="salary" value="{{ job.job_salary }}">
+            <button type="submit" class="btn btn-secondary btn-sm">APPLY</button>
+        </form>
+    </div>  
 </div>
 
 
