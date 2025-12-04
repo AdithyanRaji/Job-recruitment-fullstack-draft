@@ -177,8 +177,8 @@ def joblistings():
     jobs = Job.query.all()
     return render_template('admn_func/joblistings.html', jobs=jobs)
 
-@app.route('/selected_applicants')
-def selected_applicants():
+@app.route('/select_applicants')
+def select_applicants():
     applicants = AppliedJob.query.all()
     return render_template('admn_func/selc_appcn.html', applicants=applicants)
 
@@ -187,6 +187,10 @@ def applicant_info():
     u_info = User.query.all()
     return render_template('admn_func/userinfo.html', users=u_info)
 
+@app.route('/selected_app/<uname>')
+def selected_app(uname):
+    selected_apps = AppliedJob.query.filter_by(status='Selected').all()
+    return render_template('admn_func/selctd_users.html', sapp=selected_apps, uname=uname)
 #---------------------------------------------User Job apply--------------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])

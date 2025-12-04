@@ -28,7 +28,7 @@
             </li>
             <br><br>
             <li>
-                <form action="{{ url_for('selected_applicants',uname=uname) }}" method="GET">
+                <form action="{{ url_for('select_applicants',uname=uname) }}" method="GET">
                     <button type="submit">Applicant Selection</button>
                 </form>
             </li>
@@ -36,6 +36,12 @@
             <li>
                 <form action="{{ url_for('joblistings',uname=uname) }}" method="GET">
                     <button type="submit">Job Listings</button>
+                </form>
+            </li>
+            <br><br>
+            <li>
+                <form action="{{ url_for('selected_app',uname=uname) }}" method="GET">
+                    <button type="submit">View selected resumes</button>
                 </form>
             </li>
             <br><br>

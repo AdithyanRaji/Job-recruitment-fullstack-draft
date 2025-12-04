@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h1>Selected Users Page</h1>
+
+        {% if sapp %}
+            {% for app in sapp %}
+                <div>
+                <p><b>Username:</b> {{ app.username }}</p>
+                <p><b>Email:</b> {{ app.user.email }}</p>
+                <p><b>Job Applied:</b> {{ app.job_title }}</p>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No selected applicants.</p>
+        {% endif %}
+
+        <script src="" async defer></script>
+    </body>
+</html>
