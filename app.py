@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from werkzeug.utils import secure_filename
 from flask import send_file
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 
@@ -49,13 +50,17 @@ class AppliedJob(db.Model):
     job_title = db.Column(db.String(20), nullable=False)
     resume_path = db.Column(db.String(200), nullable=False)
     
+    status = db.Column(db.String(20), default="Pending")  # Pending / Selected / Rejected
+    applied_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    selected_at = db.Column(db.DateTime, nullable=True)
+    
     user = db.relationship('User', back_populates='applied_jobs')
     job = db.relationship('Job', back_populates='applicants')
     
-'''# add the with optiuon to create_all
-with app.app_context():
+# add the with optiuon to create_all
+'''with app.app_context():
     db.drop_all()
-    db.create_all()'''  
+    db.create_all()'''
 #------------------------------------------ROUTES---------------------------------------------
 @app.route('/')
 def index():
@@ -177,20 +182,38 @@ def joblistings():
     jobs = Job.query.all()
     return render_template('admn_func/joblistings.html', jobs=jobs)
 
-@app.route('/select_applicants')
+@app.route('/select_applicant', methods=['GET','POST'])
 def select_applicants():
-    applicants = AppliedJob.query.all()
-    return render_template('admn_func/selc_appcn.html', applicants=applicants)
+    if 'role' not in session or session['role'] != 'admin':
+        flash("Access denied.", "danger")
+        return redirect(url_for('index'))
+
+    app = AppliedJob.query.all()
+    return render_template('admn_func/selc_appcn.html', applicants=app)
+    
 
 @app.route('/applicant_info')
 def applicant_info():
     u_info = User.query.all()
     return render_template('admn_func/userinfo.html', users=u_info)
 
-@app.route('/selected_app/<uname>')
+
+@app.route('/selected_app/<uname>', methods=['GET', 'POST'])
 def selected_app(uname):
+    if 'role' not in session or session['role'] != 'admin':
+        flash("Access denied.", "danger")
+        return redirect(url_for('index'))
+    
+    app = AppliedJob.query.get_or_404(applicant_id=request.form['applicant_id'])
+    app.status = "Selected"
+    app.selected_at = datetime.now(timezone.utc)
+
+    db.session.commit()
+
     selected_apps = AppliedJob.query.filter_by(status='Selected').all()
-    return render_template('admn_func/selctd_users.html', sapp=selected_apps, uname=uname)
+    return render_template('admn_func/selctd_users.html', applicants=selected_apps, uname=uname)
+
+
 #---------------------------------------------User Job apply--------------------------------------
     
 @app.route('/job_reg',methods=['GET','POST'])
