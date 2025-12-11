@@ -11,18 +11,17 @@
     <h2>Select Applicants</h2>
     {% if applicants %}
         {% for applicant in applicants %}
-        <h3>Applicant: {{ applicant.username }}</h3>
-        <p>Position Applied: {{ applicant.job_title }}</p>
-        <form action="{{ url_for('view_resume', applicant_id=applicant.id) }}" method="GET">
-            <button type="submit">View Resume</button>
-        </form>
-        <form action="{{ url_for('selected_app', uname=uname) }}" method="POST">
-            <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
-            <input type="hidden" name="username" value="{{ applicant.username }}">
-            <input type="hidden" name="job_title" value="{{ applicant.job_title }}">
-            <button type="submit">SELECT USER</button>
-        </form>
-        <hr>
+            <h3>Applicant: {{ applicant.username }}</h3>
+            <p>Position Applied: {{ applicant.job_title }}</p>
+            <form action="{{ url_for('view_resume', applicant_id=applicant.id) }}" method="GET">
+                <button type="submit">View Resume</button>
+            </form>
+            <br>
+            <form action="{{ url_for('selected_app', uname=uname) }}" method="POST">
+                <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
+                <button type="submit">SELECT USER</button>
+            </form>
+            <hr>
         {% endfor %}
     {% else %}
         <p>No applicants available.</p>

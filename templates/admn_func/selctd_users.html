@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h1>Selected Users Page</h1>
+<head>
+  <meta charset="utf-8">
+  <title>Selected Users</title>
+</head>
+<body>
+  <h1>Selected Users Page</h1>
 
-        {% if sapp %}
-            {% for app in sapp %}
-                <div>
-                <p><b>Username:</b> {{ app.username }}</p>
-                <p><b>Email:</b> {{ app.user.email }}</p>
-                <p><b>Job Applied:</b> {{ app.job_title }}</p>
-                </div>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>No selected applicants.</p>
-        {% endif %}
+  {% if sapp %}
+    {% for app in sapp %}
+      <div>
+        <p><b>Username:</b> {{ app.username }}</p>
+        <p><b>Email:</b> {{ app.user.email if app.user else 'N/A' }}</p>
+        <p><b>Job Applied:</b> {{ app.job_title }}</p>
+        <p><b>Selected At:</b> {{ app.selected_at.strftime('%Y-%m-%d %H:%M %Z') if app.selected_at else '—' }}</p>
 
-        <script src="" async defer></script>
-    </body>
+        <!-- View resume -->
+        <form action="{{ url_for('view_resume', applicant_id=app.id) }}" method="GET" style="display:inline;">
+          <button type="submit">View Resume</button>
+        </form>
+
+        <!-- Remove (POST) -->
+        <form action="{{ url_for('reject_cand') }}" method="POST" style="display:inline; margin-left:8px;">
+          <input type="hidden" name="applicant_id" value="{{ app.id }}">
+          <button type="submit" onclick="return confirm('Remove this selected applicant?')">Remove</button>
+        </form>
+      </div>
+
+      <hr>
+    {% endfor %}
+  {% else %}
+    <p>No selected applicants.</p>
+  {% endif %}
+</body>
 </html>

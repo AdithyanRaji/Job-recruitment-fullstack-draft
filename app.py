@@ -182,7 +182,7 @@ def joblistings():
     jobs = Job.query.all()
     return render_template('admn_func/joblistings.html', jobs=jobs)
 
-@app.route('/select_applicant', methods=['GET','POST'])
+@app.route('/select_applicant', methods=['GET'])
 def select_applicants():
     if 'role' not in session or session['role'] != 'admin':
         flash("Access denied.", "danger")
@@ -203,16 +203,54 @@ def selected_app(uname):
     if 'role' not in session or session['role'] != 'admin':
         flash("Access denied.", "danger")
         return redirect(url_for('index'))
-    
-    app = AppliedJob.query.get_or_404(applicant_id=request.form['applicant_id'])
-    app.status = "Selected"
-    app.selected_at = datetime.now(timezone.utc)
+    if request.method == 'POST':
+        applicant_id=request.form['applicant_id']
+        app = AppliedJob.query.get_or_404(applicant_id)
+        app.status = "Selected"
+        app.selected_at = datetime.now(timezone.utc)
 
-    db.session.commit()
+        db.session.commit()
+        flash('Applicant selected successfully!', 'success')
+        return redirect(url_for('select_applicants'))
+        
 
     selected_apps = AppliedJob.query.filter_by(status='Selected').all()
     return render_template('admn_func/selctd_users.html', applicants=selected_apps, uname=uname)
 
+@app.route('/reject_cand', methods=['POST'])
+def reject_cand():
+    # admin guard
+    if 'role' not in session or session['role'] != 'admin':
+        flash('Access denied. Admins only.', 'danger')
+        return redirect(url_for('index'))
+
+    applicant_id = request.form.get('applicant_id')
+    if not applicant_id:
+        flash('No applicant specified.', 'warning')
+        return redirect(request.referrer or url_for('selected_app', uname=session.get('username')))
+
+    try:
+        applicant_id = int(applicant_id)
+    except ValueError:
+        flash('Invalid applicant id.', 'danger')
+        return redirect(request.referrer or url_for('selected_app', uname=session.get('username')))
+
+    app_obj = AppliedJob.query.get_or_404(applicant_id)
+
+    try:
+        # either remove the record or mark as 'Rejected'
+        # Option A: mark rejected
+        app_obj.status = 'Rejected'
+        app_obj.selected_at = None
+        db.session.commit()
+        
+        flash(f'{app_obj.username} removed/marked as Rejected.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        # optionally log the exception
+        flash('Could not remove applicant. Try again.', 'danger')
+
+    return redirect(request.referrer or url_for('selected_app', uname=session.get('username')))
 
 #---------------------------------------------User Job apply--------------------------------------
     
