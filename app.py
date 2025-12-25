@@ -189,7 +189,7 @@ def select_applicants():
         return redirect(url_for('index'))
 
     app = AppliedJob.query.all()
-    return render_template('admn_func/selc_appcn.html', applicants=app)
+    return render_template('admn_func/selc_appcn.html', applicants=app, uname=session['username'])
     
 
 @app.route('/applicant_info')
@@ -198,24 +198,36 @@ def applicant_info():
     return render_template('admn_func/userinfo.html', users=u_info)
 
 
-@app.route('/selected_app/<uname>', methods=['GET', 'POST'])
-def selected_app(uname):
+@app.route('/selected_app', methods=['GET', 'POST'])
+def selected_app():
     if 'role' not in session or session['role'] != 'admin':
         flash("Access denied.", "danger")
         return redirect(url_for('index'))
+
     if request.method == 'POST':
-        applicant_id=request.form['applicant_id']
-        app = AppliedJob.query.get_or_404(applicant_id)
+        applicant_id = request.form.get('applicant_id')
+
+        if not applicant_id:
+            flash("Invalid applicant.", "danger")
+            return redirect(url_for('selected_app'))
+
+        app = AppliedJob.query.get_or_404(int(applicant_id))
         app.status = "Selected"
         app.selected_at = datetime.now(timezone.utc)
 
         db.session.commit()
         flash('Applicant selected successfully!', 'success')
-        return redirect(url_for('select_applicants'))
-        
 
+        # ✅ Redirect back to same page
+        return redirect(url_for('selected_app'))
+
+    # GET → show selected applicants
     selected_apps = AppliedJob.query.filter_by(status='Selected').all()
-    return render_template('admn_func/selctd_users.html', applicants=selected_apps, uname=uname)
+    return render_template(
+        'admn_func/selctd_users.html',
+        applicants=selected_apps, uname=session['username']
+    )
+
 
 @app.route('/reject_cand', methods=['POST'])
 def reject_cand():

@@ -17,7 +17,7 @@
                 <button type="submit">View Resume</button>
             </form>
             <br>
-            <form action="{{ url_for('selected_app', uname=uname) }}" method="POST">
+            <form action="{{ url_for('selected_app') }}" method="POST">
                 <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
                 <button type="submit">SELECT USER</button>
             </form>
