@@ -155,7 +155,14 @@ def check_login(role):
 @app.route('/admin/dashboard')
 def admin_dashboard():
     if 'role' in session and session['role'] == 'admin':
-        return render_template('admin_dashboard.html', uname=session['username'])
+        stats = {
+        'jobs': Job.query.count(),
+        'pending': AppliedJob.query.filter_by(status='Pending').count(),
+        'selected': AppliedJob.query.filter_by(status='Selected').count(),
+        'rejected': AppliedJob.query.filter_by(status='Rejected').count()
+    }
+
+        return render_template('admin_dashboard.html', stats=stats)
     else:
         flash('Access denied. Admins only.', 'danger')
         return redirect(url_for('index'))
@@ -223,10 +230,7 @@ def selected_app():
 
     # GET → show selected applicants
     selected_apps = AppliedJob.query.filter_by(status='Selected').all()
-    return render_template(
-        'admn_func/selctd_users.html',
-        applicants=selected_apps, uname=session['username']
-    )
+    return render_template('admn_func/selctd_users.html', sapp=selected_apps, uname=session['username'])
 
 
 @app.route('/reject_cand', methods=['POST'])
