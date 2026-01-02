@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <title>Select Applicants</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
-    <h2>Select Applicants</h2>
-    {% if applicants %}
-        {% for applicant in applicants %}
-            <h3>Applicant: {{ applicant.username }}</h3>
-            <p>Position Applied: {{ applicant.job_title }}</p>
-            <form action="{{ url_for('view_resume', applicant_id=applicant.id) }}" method="GET">
-                <button type="submit">View Resume</button>
-            </form>
-            <br>
-            <form action="{{ url_for('selected_app') }}" method="POST">
-                <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
-                <button type="submit">SELECT USER</button>
-            </form>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>No applicants available.</p>
-    {% endif %}    
+    <div style="text-align:center">
+        <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+            <button type="submit">Back to Admin Dashboard</button>
+        </form>
+    </div>
     <br><br>
-    <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
-        <button type="submit">Back to Admin Dashboard</button>
-    </form>
-</body>
+    <div class="container mt-5">
 
+        <h3 class="mb-4">Pending Applicants</h3>
+
+        {% if applicants %}
+            {% for applicant in applicants %}
+                <div class="card shadow-sm p-3 mb-3">
+                    <p><b>Username:</b> {{ applicant.username }}</p>
+                    <p><b>Job:</b> {{ applicant.job_title }}</p>
+                    <div style="text-align: center;">
+                        <a href="{{ url_for('view_resume', applicant_id=applicant.id) }}"
+                        class="btn btn-outline-secondary btn-sm" style="width:50%;align =center;" target="_blank">
+                            View Resume
+                        </a>
+                        <br><br>
+                        <form action="{{ url_for('selected_app') }}" method="POST" class="d-inline">
+                            <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                Select
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No applicants available.</p>
+        {% endif %}
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary mt-3">
+            Back to Dashboard
+        </a>
+    </div>
+</body>
 </html>

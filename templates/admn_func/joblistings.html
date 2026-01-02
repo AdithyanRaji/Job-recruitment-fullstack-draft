@@ -4,49 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Jobs</title>
+
+    <!-- Correct Flask static path -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h2>Job Listings currently...</h2><br><br>
+
+<br><br>
+<h2 style="text-align:center;">Job Listings currently...</h2>
+<br>
+
+{% if jobs %}
 
     {% if session['username'] == "admin" %}
-        {% if jobs %}
-            {% for job in jobs %}
-                <h3>Job Title: {{ job.job_title }}</h3>
-                <p>Company: {{ job.job_company }}</p>
-                <p>Description: {{ job.job_description }}</p>
-                <p>Location: {{ job.job_location }}</p>
-                <p>Salary: ${{ job.job_salary }}</p>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>No job listings available.</p>
-        {% endif %}
-    {% else %}
-            {% if jobs %}
-            {% for job in jobs %}
-                <h3>Job Title: {{ job.job_title }}</h3>
-                <p>Company: {{ job.job_company }}</p>
-                <p>Description: {{ job.job_description }}</p>
-                <p>Location: {{ job.job_location }}</p>
-                <p>Salary: ${{ job.job_salary }}</p>
-                <div class="col-2 text-end">
-                    <form action="{{ url_for('apply', job_id = job.job_id) }}" method="GET">
-                        <input type="hidden" name="title" value="{{ job.job_title }}">
-                        <input type="hidden" name="location" value="{{ job.job_location }}">
-                        <input type="hidden" name="desc" value="{{ job.job_description }}">
-                        <input type="hidden" name="salary" value="{{ job.job_salary }}">
-                        <button type="submit" class="btn btn-secondary btn-sm">APPLY</button>
-                    </form>
-                </div>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>No job listings available.</p>
-        {% endif %}
+        <nav>
+        <h1 style="text-align:center;">Welcome, {{ session['username'] }}!</h1>
+        <div style="text-align:center;display:grid;margin-top:20px;">
+            <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+                <button type="submit">Back to Admin Dashboard</button>
+            </form>
+        </div>
+        </nav>
+        <div class="job-grid">
+                <!-- ADMIN VIEW -->
+                {% for job in jobs %}
+                    <div class="job-card">
+
+                        <div class="job-title">
+                            {{ job.job_title }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Company:</span> {{ job.job_company }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Location:</span> {{ job.job_location }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Salary:</span> {{ job.job_salary }}
+                        </div>
+
+                        <div class="job-desc">
+                            <span>Job-Description:</span>{{ job.job_description }}
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
     {% endif %}
+    {% if session['username'] != "admin" %}
+        <nav>
+        <h1 style="text-align:center;">Welcome, {{ session['username'] }}!</h1>
+        <div style="text-align:center;display:grid;margin-top:20px;">
+            <form action="{{ url_for('user_dashboard', uname=uname) }}" method="GET">
+                <button type="submit">Back to User Dashboard</button>
+            </form>
+        </div>
+        </nav>
+            <div class="job-grid">
+                <!-- USER VIEW -->
+                {% for job in jobs %}
+                    <div class="job-card">
+
+                        <div class="job-title">
+                            {{ job.job_title }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Company:</span> {{ job.job_company }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Location:</span> {{ job.job_location }}
+                        </div>
+
+                        <div class="job-meta">
+                            <span>Salary:</span> {{ job.job_salary }}
+                        </div>
+
+                        <div class="job-desc">
+                            <span>Job-Description:</span>{{ job.job_description }}
+                        </div>
+
+                        <form action="{{ url_for('apply', job_id=job.job_id) }}" method="GET">
+                            <input type="hidden" name="title" value="{{ job.job_title }}">
+                            <input type="hidden" name="location" value="{{ job.job_location }}">
+                            <input type="hidden" name="desc" value="{{ job.job_description }}">
+                            <input type="hidden" name="salary" value="{{ job.job_salary }}">
+
+                            <button type="submit">APPLY</button>
+                        </form>
+
+                    </div>
+                {% endfor %}
+            </div>
+    {% endif %}
+
+    {% else %}
+        <p style="text-align:center;">No job listings available.</p>
+    {% endif %}
+</div>
+
+
+
     <br><br>
-    <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
-        <button type="submit">Back to Admin Dashboard</button>
-    </form>
 </body>
 </html>

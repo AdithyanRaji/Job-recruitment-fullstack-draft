@@ -3,49 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ role }} registeration page</title>
+    <title>{{ role }} Registration</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<div>
-    {% if role.upper() == "USER" %}
-        <h2>USER REGISTRATION</h2>
-        <input type="hidden" name=role value="user">
-        <form action="{{url_for('check_register',role=role)}}" method="POST">
-            <label>USERNAME: </label>
-            <input type="text" name="username">
-            <br><br>
-            <label>EMAIL:</label>
-            <input type="email" name="email">
-            <br><br>
-            <label>FULL NAME:</label>
-            <input type="text" name="full_name">
-            <br><br>
-            <label>PASSWORD:</label>
-            <input type="password" name="password">
-            <br><br>
-            <button type = "submit "> SUBMIT HERE</button>
-        </form>
-        <form action="{{url_for('user_login')}}" method="GET">
-            <button type = "submit "> ALREADY REGISTERED? LOGIN HERE</button>
-        </form>
-    {% endif %}
-    {% if role.upper() == "ADMIN" %}
-        <h2>ADMIN REGISTRATION</h2>
-        <form action="{{url_for('check_register',role=role)}}" method="POST">
-            <input type="hidden" name=role value="admin">
-            <label>ADMINNAME: </label>
-            <input type="text" name="username">
-            <br><br>
-            <label>PASSWORD:</label>
-            <input type="password" name="password">
-            <br><br>
-            <button type = "submit "> SUBMIT HERE</button>
-        </form>
-    <form action="{{url_for('admin_login')}}" method="GET">
-        <button type = "submit "> ALREADY REGISTERED? LOGIN HERE</button>
-    </form>
-    {% endif %}
 
-</div>
+{% if role.upper() == "USER" %}
+
+    <h2 style="text-align:center;">User Registration</h2>
+
+    <div class="center-card">
+        <form action="{{ url_for('check_register', role=role) }}" method="POST">
+
+            <input type="hidden" name="role" value="user">
+
+            <label>Username</label>
+            <input type="text" name="username" required>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Full Name</label>
+            <input type="text" name="full_name" required>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div style="text-align:center;">
+            <form action="{{ url_for('user_login') }}" method="GET">
+                <button type="submit" class="secondary-btn">
+                    Already Registered? Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endif %}
+
+{% if role.upper() == "ADMIN" %}
+
+    <h2 style="text-align:center;">Admin Registration</h2>
+
+    <div class="center-card">
+        <form action="{{ url_for('check_register', role=role) }}" method="POST">
+
+            <input type="hidden" name="role" value="admin">
+
+            <label>Admin Name</label>
+            <input type="text" name="username" required>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <div style="text-align:center;">
+            <form action="{{ url_for('admin_login') }}" method="GET">
+                <button type="submit" class="secondary-btn">
+                    Already Registered? Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endif %}
+
 </body>
 </html>

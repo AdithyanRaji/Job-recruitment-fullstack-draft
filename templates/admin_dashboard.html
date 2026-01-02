@@ -1,66 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Add your CSS links here -->
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        #backg{
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <h1>Admin Dashboard</h1>
-        <nav>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </nav>
-    </header>
-    <main>
-        <h2>Welcome, {{ uname }}</h2>
-        <p>This is the admin dashboard where you can manage the platform.</p>
-        <!-- Add more admin functionalities here -->
-        <p>Total Jobs: {{ stats.jobs }}</p>
-        <p>Pending: {{ stats.pending }}</p>
-        <p>Selected: {{ stats.selected }}</p>
-        <p>Rejected: {{ stats.rejected }}</p>
 
-        <ul>
-            <br><br>
-            <li>
-                <form action="{{ url_for('applicant_info',uname=uname) }}" method="GET">
-                    <button type="submit">User Information</button>
-                </form>
-            </li>
-            <br><br>
-            <li>
-                <form action="{{ url_for('select_applicants',uname=uname) }}" method="GET">
-                    <button type="submit">Applicant Selection</button>
-                </form>
-            </li>
-            <br><br>
-            <li>
-                <form action="{{ url_for('joblistings',uname=uname) }}" method="GET">
-                    <button type="submit">Job Listings</button>
-                </form>
-            </li>
-            <br><br>
-            <li>
-                <form action="{{ url_for('selected_app',uname=uname) }}" method="GET">
-                    <button type="submit">View selected resumes</button>
-                </form>
-            </li>
-            <br><br>
-            <li>
-                <form action="{{ url_for('add_jobs',uname=uname) }}" method="GET">
-                    <button type="submit">Add/Update Jobs</button>
-                </form>
-            </li>
-            <br><br>
-        </ul>
-    </main>
-    <footer>
-        <p>&copy; 2025 AJYNT JOB RECRUITERS</p>
-    </footer>
+<div class="container mt-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4" id="backg">
+        <h2>Admin Dashboard</h2>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h6>Total Jobs</h6>
+                <h3>{{ stats.jobs }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-warning">Pending</h6>
+                <h3>{{ stats.pending }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-success">Selected</h6>
+                <h3>{{ stats.selected }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h6 class="text-danger">Rejected</h6>
+                <h3>{{ stats.rejected }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Actions -->
+    <div class="card shadow-sm p-4">
+        <h5 class="mb-3">Admin Actions</h5>
+
+        <div class="d-grid gap-3">
+
+            <a href="{{ url_for('applicant_info') }}" class="btn btn-outline-primary">
+                View User Information
+            </a>
+
+            <a href="{{ url_for('select_applicants') }}" class="btn btn-outline-primary">
+                Applicant Selection
+            </a>
+
+            <a href="{{ url_for('joblistings') }}" class="btn btn-outline-primary">
+                Job Listings
+            </a>
+
+            <a href="{{ url_for('selected_app') }}" class="btn btn-outline-primary">
+                Selected Resumes
+            </a>
+
+            <a href="{{ url_for('add_jobs') }}" class="btn btn-outline-success">
+                Add / Update Jobs
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
 </body>
-
 </html>

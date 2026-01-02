@@ -310,6 +310,45 @@ def view_resume(applicant_id):
     resume_path = applicant.resume_path
 
     return send_file(resume_path, as_attachment=False)
+#-----------------------------------------------------User Dashboard---------------------------------
+@app.route('/user/dashboard')
+def user_dashboard():
+    if 'username' not in session or session['role'] != 'user':
+        flash("Please login as a user.", "warning")
+        return redirect(url_for('user_login'))
+
+    user = User.query.filter_by(username=session['username']).first()
+
+    total_apps = AppliedJob.query.filter_by(user_id=user.id).count()
+    pending = AppliedJob.query.filter_by(user_id=user.id, status='Pending').count()
+    selected = AppliedJob.query.filter_by(user_id=user.id, status='Selected').count()
+    rejected = AppliedJob.query.filter_by(user_id=user.id, status='Rejected').count()
+
+    recent_apps = AppliedJob.query.filter_by(user_id=user.id)\
+        .order_by(AppliedJob.applied_at.desc())\
+        .limit(5)\
+        .all()
+
+    return render_template(
+        'user_func/dashboard.html',
+        user=user,
+        total=total_apps,
+        pending=pending,
+        selected=selected,
+        rejected=rejected,
+        recent_apps=recent_apps
+    )
+    
+@app.route('/user/applications')
+def user_applications():
+    if 'username' not in session or session['role'] != 'user':
+        flash("Please login as a user.", "warning")
+        return redirect(url_for('user_login'))
+
+    user = User.query.filter_by(username=session['username']).first()
+    applications = AppliedJob.query.filter_by(user_id=user.id).all()
+
+    return render_template('user_func/applications.html', applications=applications)
 
 #---------------------------------------------LOGOUT-----------------------------------------
 @app.route('/logout')

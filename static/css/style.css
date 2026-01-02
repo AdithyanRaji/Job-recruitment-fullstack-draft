@@ -1,0 +1,588 @@
+
+/* ---------- GLOBAL RESET & BASE ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #2d3748;
+    line-height: 1.6;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+button {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- CENTER CARD ---------- */
+.center-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 80px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
+}
+
+.center-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #FF4742 0%, #ff6b66 100%);
+    border-radius: 16px 16px 0 0;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- FORMS ---------- */
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #4a5568;
+    letter-spacing: 0.3px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    font-size: 15px;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #FF4742;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(255, 71, 66, 0.1);
+    transform: translateY(-1px);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+    color: #a0aec0;
+}
+
+/* ---------- PRIMARY BUTTON ---------- */
+button {
+    background: linear-gradient(135deg, #FF4742 0%, #ff6259 100%);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 
+        0 4px 12px rgba(255, 71, 66, 0.25),
+        0 2px 4px rgba(255, 71, 66, 0.15);
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Inter", "Nunito", "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    min-height: 48px;
+    outline: 0;
+    padding: 14px 28px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff6259 0%, #ff7871 100%);
+    box-shadow: 
+        0 6px 20px rgba(255, 71, 66, 0.35),
+        0 4px 8px rgba(255, 71, 66, 0.2);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 8px rgba(255, 71, 66, 0.25),
+        0 1px 4px rgba(255, 71, 66, 0.15);
+}
+
+/* ---------- SECONDARY BUTTON ---------- */
+.secondary-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #7d858e 100%);
+    margin-top: 12px;
+}
+
+.secondary-btn:hover {
+    background: linear-gradient(135deg, #5a6268 0%, #6c757d 100%);
+    box-shadow: 
+        0 6px 20px rgba(108, 117, 125, 0.3),
+        0 4px 8px rgba(108, 117, 125, 0.15);
+}
+
+/* ---------- TITLES ---------- */
+h1, h2 {
+    margin-bottom: 24px;
+    color: #1a202c;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+/* ---------- JOB STATUS ---------- */
+.status-pending {
+    color: #f59e0b;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.status-selected {
+    color: #10b981;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-rejected {
+    color: #ef4444;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ---------- JOB CARD ---------- */
+.job-grid {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+.job-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 6px solid #0d6efd;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.job-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.job-meta {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.job-meta span {
+    font-weight: 600;
+    color: #000;
+}
+
+.job-desc {
+    margin-top: 10px;
+    color: #555;
+    font-size: 14px;
+}
+.job-desc span {
+    font-weight: 600;
+    color: #000;
+}
+.job-actions {
+    margin-top: 15px;
+    text-align: right;
+}
+
+/* ---------- APPLY BUTTON OVERRIDE ---------- */
+.job-actions button {
+    background: #FF4742;
+    border: 1px solid #FF4742;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 14px;
+}
+
+.job-actions button:hover {
+    background: transparent;
+    color: #FF4742;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar-brand {
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    font-size: 20px;
+    background: linear-gradient(135deg, #FF4742 0%, #ff6b66 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-link {
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: #FF4742;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #FF4742 !important;
+    background-color: rgba(255, 71, 66, 0.05);
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+    border-top: 2px solid #e2e8f0;
+    padding: 32px 0;
+    margin-top: 80px;
+    background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.5) 100%);
+}
+
+/* ---------- CENTER CARD REFINEMENTS ---------- */
+.center-card h2 {
+    margin-bottom: 28px;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.center-card label {
+    margin-top: 12px;
+}
+
+.center-card button {
+    margin-top: 20px;
+}
+
+/* ---------- UTILITY CLASSES ---------- */
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 768px) {
+    .center-card {
+        margin: 40px 20px;
+        padding: 30px 24px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 15px;
+        min-height: 44px;
+    }
+
+    .job-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .center-card {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* ---------- LOADING STATES ---------- */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid #FF4742;
+    outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+.back-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+.container {
+    max-width: 600px;
+    width: 100%;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 30px;
+    margin-top: 60px; /* To account for the back button */
+}
+
+h3 {
+    text-align: center;
+    color: #495057;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 12px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .back-button-container {
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .card {
+        margin-top: 20px;
+        padding: 20px;
+    }
+}

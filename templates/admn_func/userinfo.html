@@ -2,21 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>User Information</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> USER INFORMATIONS </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
-    {% for user in users %}
-        {% if user.username != 'admin' %}
-        <h2>User: {{ user.username }}</h2>
-        <p>Email: {{ user.email }}</p>
-        <p>Full Name: {{ user.full_name }}</p>
-        <hr>
-        {% endif %}
-    {% endfor %}
-    <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
-        <button type="submit">Back to Admin Dashboard</button>
-    </form>
-    
+    <div style="text-align:center">
+        <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+            <button type="submit">Back to Admin Dashboard</button>
+        </form>
+    </div>
+    <br><br>
+    <div class="container mt-5">
+
+        <h3 class="mb-4">Registered Users</h3>
+
+        {% for user in users %}
+            {% if user.username != 'admin' %}
+                <div class="card shadow-sm p-3 mb-3">
+                    <p><b>Username:</b> {{ user.username }}</p>
+                    <p><b>Email:</b> {{ user.email }}</p>
+                    <p><b>Full Name:</b> {{ user.full_name }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
 </body>
-</html>    
+</html>

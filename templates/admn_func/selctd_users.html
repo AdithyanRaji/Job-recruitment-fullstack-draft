@@ -1,36 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Selected Users</title>
+    <meta charset="UTF-8">
+    <title>Selected Applicants</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
-  <h1>Selected Users Page</h1>
-
-  {% if sapp %}
-    {% for app in sapp %}
-      <div>
-        <p><b>Username:</b> {{ app.username }}</p>
-        <p><b>Email:</b> {{ app.user.email if app.user else 'N/A' }}</p>
-        <p><b>Job Applied:</b> {{ app.job_title }}</p>
-        <p><b>Selected At:</b> {{ app.selected_at.strftime('%Y-%m-%d %H:%M %Z') if app.selected_at else '—' }}</p>
-
-        <!-- View resume -->
-        <form action="{{ url_for('view_resume', applicant_id=app.id) }}" method="GET" style="display:inline;">
-          <button type="submit">View Resume</button>
+    <div style="text-align:center">
+        <form action="{{ url_for('admin_dashboard', uname=uname) }}" method="GET">
+            <button type="submit">Back to Admin Dashboard</button>
         </form>
+    </div>
+    <br><br>
+    <div class="container mt-5">
 
-        <!-- Remove (POST) -->
-        <form action="{{ url_for('reject_cand') }}" method="POST" style="display:inline; margin-left:8px;">
-          <input type="hidden" name="applicant_id" value="{{ app.id }}">
-          <button type="submit" onclick="return confirm('Remove this selected applicant?')">Remove</button>
-        </form>
-      </div>
+        <h3 class="mb-4">Selected Applicants</h3>
 
-      <hr>
-    {% endfor %}
-  {% else %}
-    <p>No selected applicants.</p>
-  {% endif %}
+        {% if sapp %}
+            {% for app in sapp %}
+                <div class="card shadow-sm p-3 mb-3">
+                    <p><b>Username:</b> {{ app.username }}</p>
+                    <p><b>Email:</b> {{ app.user.email if app.user else 'N/A' }}</p>
+                    <p><b>Job:</b> {{ app.job_title }}</p>
+                    <p><b>Selected At:</b>
+                        {{ app.selected_at.strftime('%d %b %Y %I:%M %p') if app.selected_at else '—' }}
+                    </p>
+
+                    <a href="{{ url_for('view_resume', applicant_id=app.id) }}"
+                    class="btn btn-outline-secondary btn-sm">
+                        View Resume
+                    </a>
+
+                    <form action="{{ url_for('reject_cand') }}" method="POST" class="d-inline">
+                        <input type="hidden" name="applicant_id" value="{{ app.id }}">
+                        <button class="btn btn-danger btn-sm"
+                                onclick="return confirm('Remove this applicant?')">
+                            Remove
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No selected applicants.</p>
+        {% endif %}
+
+    </div>
 </body>
 </html>

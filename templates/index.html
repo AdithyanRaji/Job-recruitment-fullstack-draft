@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <title>Access | Type</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div style="text-align: center; display: block; margin: 100px auto 0 auto; background: red;border-radius: 3px;padding: 30px;">
+    <div class="center-card">
         <form action="{{ url_for('admin_register') }}" method="GET">
-            <button name="admin" type="SUBMIT">ADMIN</button>
+            <button type="submit">ADMIN</button>
         </form>
-        <br><br>
+
         <form action="{{ url_for('user_register') }}" method="GET">
-            <button name="user" type="SUBMIT">USER</button>
+            <button type="submit" class="secondary-btn">USER</button>
         </form>
     </div>
+
 
 </body>
 </html>

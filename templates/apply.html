@@ -1,36 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> AJYNT-{{ request.args.get('title') }}</title>
+    <title>Apply – {{ request.args.get('title') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .up-btn {
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .up-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Apply For Job - {{ request.args.get('title') }}</h1>
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
 
-    <h2>Job Description</h2>
-    <p>{{ request.args.get('desc') }}</p>
-    <p><b>Location:</b> {{ request.args.get('location') }}</p>
-    <p><b>Salary:</b> {{ request.args.get('salary') }}</p>
+        <h2 class="mb-3">Apply for Job</h2>
+        <h5 class="text-muted mb-4">{{ request.args.get('title') }}</h5>
 
-    <p><b>Applicant:</b> {{ session['username'] }}</p>
+        <p><strong>Description:</strong><br>{{ request.args.get('desc') }}</p>
+        <p><strong>Location:</strong> {{ request.args.get('location') }}</p>
+        <p><strong>Salary:</strong> {{ request.args.get('salary') }}</p>
 
-    <form action="{{ url_for('apply', job_id=job_id) }}"
-          method="POST"
-          enctype="multipart/form-data">
+        <hr>
 
-        <!-- Keep job-related values across POST -->
-        <input type="hidden" name="title" value="{{ request.args.get('title') }}">
-        <input type="hidden" name="location" value="{{ request.args.get('location') }}">
-        <input type="hidden" name="salary" value="{{ request.args.get('salary') }}">
-        <input type="hidden" name="desc" value="{{ request.args.get('desc') }}">
+        <p><strong>Applicant:</strong> {{ session['username'] }}</p>
 
-        <!-- Resume upload -->
-        <label>Upload Resume (PDF/DOC):</label><br>
-        <input type="file" name="resume" accept=".pdf,.doc,.docx" required><br><br>
+        <form action="{{ url_for('apply', job_id=job_id) }}"
+              method="POST"
+              enctype="multipart/form-data">
 
-        <button type="submit">Submit Application</button>
-    </form>
+            <!-- Preserve job details -->
+            <input type="hidden" name="title" value="{{ request.args.get('title') }}">
+            <input type="hidden" name="location" value="{{ request.args.get('location') }}">
+            <input type="hidden" name="salary" value="{{ request.args.get('salary') }}">
+            <input type="hidden" name="desc" value="{{ request.args.get('desc') }}">
+
+            <div class="mb-3">
+                <label class="form-label">Upload Resume (PDF / DOC)</label>
+                <input type="file" class="form-control" name="resume"
+                       accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Submit Application
+            </button>
+        </form>
+        <div class="btn btn-outline-secondary" style="text-align:center;">
+            <a href="{{ url_for('user_dashboard') }}"><span class="up-btn">Go to User-Dashboard</span></a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
