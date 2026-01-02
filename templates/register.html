@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ role }} Registration</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="static/favicon.png">
+
 </head>
 <body>
 
 {% if role.upper() == "USER" %}
 
-    <h2 style="text-align:center;">User Registration</h2>
-
     <div class="center-card">
+        <h2 style="text-align:center;">User Registration</h2>
         <form action="{{ url_for('check_register', role=role) }}" method="POST">
 
             <input type="hidden" name="role" value="user">
@@ -47,9 +47,8 @@
 
 {% if role.upper() == "ADMIN" %}
 
-    <h2 style="text-align:center;">Admin Registration</h2>
-
     <div class="center-card">
+        <h2 style="text-align:center;">Admin Registration</h2>
         <form action="{{ url_for('check_register', role=role) }}" method="POST">
 
             <input type="hidden" name="role" value="admin">
