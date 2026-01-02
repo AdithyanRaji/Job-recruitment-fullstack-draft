@@ -134,7 +134,7 @@ python app.py
 ### 4️⃣ Open in Browser
 
 ```
-(https://job-recruitment-fullstack-draft.onrender.com)
+https://job-recruitment-fullstack-draft.onrender.com
 ```
 
 ---
