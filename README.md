@@ -134,7 +134,7 @@ python app.py
 ### 4️⃣ Open in Browser
 
 ```
-http://127.0.0.1:5000
+(https://job-recruitment-fullstack-draft.onrender.com)
 ```
 
 ---
